@@ -41,7 +41,12 @@ public class User{
 
     public void setName(String name) {
         if (name != null && !name.trim().isEmpty()) {this.name=name;} 
-        else {throw new IllegalArgumentException("Name can not null or empty");}
+        else {try {
+            throw new UserException("Name can not null or empty");
+            } catch (UserException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+}
     }
 
     public boolean isIsAdmin() {
@@ -57,12 +62,14 @@ public class User{
     @Override
     protected Object clone() throws CloneNotSupportedException {
         try {
-            User user = new User(new Random().nextInt(100), name, isAdmin);
-            if (name != null && !name.trim().isEmpty()) {this.name=name;} 
-            else {throw new CloneNotSupportedException("Name is null or empty!!!!!");}
-            return user;
+            if (name != null && !name.trim().isEmpty()) {
+            
+            this.name=name;
+            User user = new User(new Random().nextInt(15), name, isAdmin);
+            return user;}
+            else {throw new CloneNotSupportedException("Name is null or empty!!!!!");}   
         } catch (UserException ex) {
-            System.out.println("!!!!!!!!!!");
+            System.out.println("Warning! Clone's id is not uniqe!");
           return null;  
         }  
     }
@@ -97,7 +104,7 @@ public class User{
         
         try {
             System.out.println("origin user:");
-            User origin = new User(1,"Petr", true);
+            User origin = new User(34,"Petr", true);
             System.out.println("hashCode = " + origin.hashCode());
             
             
@@ -111,6 +118,8 @@ public class User{
             System.out.println("Second user object:");
             User origin2 = new User(2,"Ivan", true);
             System.out.println("hashCode = " + origin2.hashCode());
+            System.out.println("copy of second user:");
+            User copy2 = (User)origin2.clone();
             
             System.out.println("");
             
