@@ -28,7 +28,7 @@ public class User{
         return id;
     }
 
-    public void setId(int id)throws UserException{
+    public void setId(int id) throws UserException{
         for (User user : users) {
             if(id!=user.id) this.id = id;
             else throw new UserException("!");      
@@ -39,14 +39,9 @@ public class User{
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws UserException {
         if (name != null && !name.trim().isEmpty()) {this.name=name;} 
-        else {try {
-            throw new UserException("Name can not null or empty");
-            } catch (UserException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-}
+        else throw new UserException("Name can not null or empty");    
     }
 
     public boolean isIsAdmin() {
@@ -60,18 +55,16 @@ public class User{
     
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-        try {
-            if (name != null && !name.trim().isEmpty()) {
-            
-            this.name=name;
-            User user = new User(new Random().nextInt(15), name, isAdmin);
-            return user;}
-            else {throw new CloneNotSupportedException("Name is null or empty!!!!!");}   
-        } catch (UserException ex) {
-            System.out.println("Warning! Clone's id is not uniqe!");
-          return null;  
-        }  
+    protected Object clone() throws CloneNotSupportedException  {
+            if (name != null && !name.trim().isEmpty()){
+                User user=null;
+                try {
+                    user = new User(new Random().nextInt(15),name, isAdmin);
+                } catch (UserException ex) {
+                    Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return user;}            
+            else throw new CloneNotSupportedException("Name is null or empty!!!!!");  
     }
 
     @Override
@@ -100,7 +93,7 @@ public class User{
         return true;
     }
     
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         
         try {
             System.out.println("origin user:");
@@ -134,12 +127,13 @@ public class User{
             User origin4 = new User(3,"Vasilii", false);
             
         } catch (UserException ex) {
-            System.out.println("New user's id is not uniq");
+            System.out.println("New user's id is not uniq or Name is null or empty");
         }
          catch (CloneNotSupportedException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+             System.out.println(ex.getMessage());
+        
             } 
-    }        
+    } */       
 }
     
 
